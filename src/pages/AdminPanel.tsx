@@ -240,10 +240,10 @@ const AdminPanel = () => {
               <p className="text-muted-foreground">Sites no Portfólio</p>
             </CardContent>
           </Card>
-          <Card>
+            <Card>
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-primary mb-2">
-                {18 + dbImages.length + uploadedImages.length}
+                {dbImages.length + uploadedImages.length}
               </div>
               <p className="text-muted-foreground">Total no Carrossel</p>
             </CardContent>
