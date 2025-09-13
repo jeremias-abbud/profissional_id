@@ -1,21 +1,21 @@
-import React from 'react'
-import { ExternalLink, Star } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { PortfolioSite } from '@/lib/supabase'
+import React from 'react';
+import { ExternalLink, Star } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { PortfolioSite } from '@/lib/supabase';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/components/ui/carousel'
-import Autoplay from 'embla-carousel-autoplay'
+} from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 interface PortfolioGridProps {
-  sites: PortfolioSite[]
-  loading?: boolean
+  sites: PortfolioSite[];
+  loading?: boolean;
 }
 
 const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
@@ -38,7 +38,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
           </Card>
         ))}
       </div>
-    )
+    );
   }
 
   if (sites.length === 0) {
@@ -48,7 +48,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
           Nenhum site no portfólio ainda.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -62,80 +62,78 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
           delay: 3000,
         }),
       ]}
-      className="max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto"
+      className="w-full"
     >
-      <CarouselContent className="p-2">
+      <CarouselContent>
         {sites.map((site) => (
           <CarouselItem
             key={site.id}
-            className="sm:basis-full md:basis-1/2 lg:basis-1/3"
+            className="sm:basis-1/2 md:basis-1/2 lg:basis-1/3 p-4"
           >
-            <div className="p-2">
-              <Card className="group overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="relative">
-                  <div className="aspect-video overflow-hidden">
-                    <img
-                      src={site.image_url}
-                      alt={site.title}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  {site.featured && (
-                    <div className="absolute top-4 right-4">
-                      <Badge
-                        variant="secondary"
-                        className="bg-primary text-primary-foreground"
-                      >
-                        <Star className="w-3 h-3 mr-1" />
-                        Destaque
-                      </Badge>
-                    </div>
-                  )}
+            <Card className="group overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="relative">
+                <div className="aspect-video overflow-hidden">
+                  <img
+                    src={site.image_url}
+                    alt={site.title}
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold text-lg mb-2">{site.title}</h3>
-                      <p className="text-muted-foreground text-sm line-clamp-2">
-                        {site.description}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {site.technologies.map((tech) => (
-                        <Badge key={tech} variant="outline" className="text-xs">
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => {
-                        if (site.url && site.url.startsWith('http')) {
-                          window.open(site.url, '_blank')
-                        } else {
-                          console.error('URL inválida:', site.url)
-                        }
-                      }}
+                {site.featured && (
+                  <div className="absolute top-4 right-4">
+                    <Badge
+                      variant="secondary"
+                      className="bg-primary text-primary-foreground"
                     >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Ver Site
-                    </Button>
+                      <Star className="w-3 h-3 mr-1" />
+                      Destaque
+                    </Badge>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                )}
+              </div>
+
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">{site.title}</h3>
+                    <p className="text-muted-foreground text-sm line-clamp-2">
+                      {site.description}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {site.technologies.map((tech) => (
+                      <Badge key={tech} variant="outline" className="text-xs">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
+                      if (site.url && site.url.startsWith('http')) {
+                        window.open(site.url, '_blank');
+                      } else {
+                        console.error('URL inválida:', site.url);
+                      }
+                    }}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Ver Site
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </CarouselItem>
         ))}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
-  )
-}
+  );
+};
 
-export default PortfolioGrid
+export default PortfolioGrid;
