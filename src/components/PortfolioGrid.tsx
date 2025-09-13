@@ -1,21 +1,21 @@
-import React from 'react'
-import { ExternalLink, Star } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { PortfolioSite } from '@/lib/supabase'
+import React from 'react';
+import { ExternalLink, Star } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { PortfolioSite } from '@/lib/supabase';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from '@/components/ui/carousel'
-import Autoplay from 'embla-carousel-autoplay'
+} from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
 interface PortfolioGridProps {
-  sites: PortfolioSite[]
-  loading?: boolean
+  sites: PortfolioSite[];
+  loading?: boolean;
 }
 
 const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
@@ -38,7 +38,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
           </Card>
         ))}
       </div>
-    )
+    );
   }
 
   if (sites.length === 0) {
@@ -48,7 +48,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
           Nenhum site no portfólio ainda.
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -63,8 +63,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
             delay: 3000,
           }),
         ]}
-        // Use classes de responsividade para controlar a largura
-        className="w-full max-w-sm mx-auto sm:max-w-md md:max-w-xl lg:max-w-4xl"
+        className="max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto"
       >
         <CarouselContent className="p-2">
           {sites.map((site) => (
@@ -111,8 +110,8 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
                         size="sm"
                         className="w-full"
                         onClick={() => {
-                          const url = site.url.startsWith('http') ? site.url : `https://${site.url}`
-                          window.open(url, '_blank')
+                          const url = site.url.startsWith('http') ? site.url : `https://${site.url}`;
+                          window.open(url, '_blank');
                         }}
                       >
                         <ExternalLink className="w-4 h-4 mr-2" />
@@ -129,7 +128,7 @@ const PortfolioGrid: React.FC<PortfolioGridProps> = ({ sites, loading }) => {
         <CarouselNext />
       </Carousel>
     </div>
-  )
-}
+  );
+};
 
-export default PortfolioGrid
+export default PortfolioGrid;
