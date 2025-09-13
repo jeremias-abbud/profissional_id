@@ -1,13 +1,16 @@
 import React from "react";
-import { Instagram, Eye, ArrowRight } from "lucide-react";
+import { Instagram, Eye, ArrowRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoCarousel from "@/components/LogoCarousel";
+import PortfolioGrid from "@/components/PortfolioGrid";
+import { usePortfolio } from "@/hooks/usePortfolio";
 
 interface PortfolioSectionProps {
   uploadedImages?: string[];
 }
 
 const PortfolioSection: React.FC<PortfolioSectionProps> = ({ uploadedImages = [] }) => {
+  const { sites, loading } = usePortfolio();
   const handleInstagram = () => {
     window.open("https://www.instagram.com/profissional.id/", "_blank");
   };
@@ -47,6 +50,22 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({ uploadedImages = []
 
             <LogoCarousel uploadedImages={uploadedImages} />
           </div>
+
+          {/* Sites do Portfolio */}
+          {sites.length > 0 && (
+            <div className="mb-16 animate-fade-in">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-semibold text-foreground mb-3">
+                  Sites Criados
+                </h3>
+                <p className="text-muted-foreground">
+                  Projetos web desenvolvidos com foco em design e experiência do usuário
+                </p>
+              </div>
+
+              <PortfolioGrid sites={sites} loading={loading} />
+            </div>
+          )}
 
           {/* Instagram Integration */}
           <div className="text-center mb-12">
@@ -108,10 +127,10 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({ uploadedImages = []
             <div className="bg-card p-6 rounded-xl shadow-elegant border animate-fade-in hover:shadow-glow transition-all duration-300" style={{ animationDelay: "0.2s" }}>
               <div className="text-center">
                 <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-secondary-foreground font-bold">100%</span>
+                  <Globe className="w-6 h-6 text-secondary-foreground" />
                 </div>
-                <h4 className="text-lg font-semibold text-foreground mb-2">Projetos Digitais</h4>
-                <p className="text-muted-foreground text-sm">Sites, motion graphics, posts e campanhas</p>
+                <h4 className="text-lg font-semibold text-foreground mb-2">{sites.length}+ Sites</h4>
+                <p className="text-muted-foreground text-sm">Projetos web desenvolvidos e otimizados</p>
               </div>
             </div>
 

@@ -5,7 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ImageUploader from '@/components/ImageUploader';
 import LogoCarousel from '@/components/LogoCarousel';
+import PortfolioManager from '@/components/admin/PortfolioManager';
 import { useCarouselImages } from '@/hooks/useCarouselImages';
+import { usePortfolio } from '@/hooks/usePortfolio';
 
 const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,6 +16,7 @@ const AdminPanel = () => {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [error, setError] = useState('');
   const { images: dbImages, uploadImage, deleteImage, loading } = useCarouselImages();
+  const { sites: portfolioSites } = usePortfolio();
 
   // Senha do admin (em produção, isso deveria vir de um backend seguro)
   const ADMIN_PASSWORD = 'profissionalid2024';
@@ -187,6 +190,9 @@ const AdminPanel = () => {
           </CardContent>
         </Card>
 
+        {/* Gerenciamento de Portfólio */}
+        <PortfolioManager />
+
         {/* Gerenciamento Local (Legacy) */}
         <Card>
           <CardHeader>
@@ -229,9 +235,9 @@ const AdminPanel = () => {
           <Card>
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-secondary mb-2">
-                18
+                {portfolioSites.length}
               </div>
-              <p className="text-muted-foreground">Exemplos de Portfolio</p>
+              <p className="text-muted-foreground">Sites no Portfólio</p>
             </CardContent>
           </Card>
           <Card>

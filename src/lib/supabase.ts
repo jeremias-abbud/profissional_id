@@ -11,3 +11,15 @@ export type CarouselImage = {
   url: string
   uploaded_at: string
 }
+
+export type PortfolioSite = {
+  id: string
+  title: string
+  description: string
+  url: string
+  image_url: string
+  technologies: string[]
+  featured: boolean
+  created_at: string
+  updated_at: string
+}
