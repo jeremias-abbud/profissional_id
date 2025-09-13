@@ -52,20 +52,18 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({ uploadedImages = []
           </div>
 
           {/* Sites do Portfolio */}
-          {sites.length > 0 && (
-            <div className="mb-16 animate-fade-in">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-semibold text-foreground mb-3">
-                  Sites Criados
-                </h3>
-                <p className="text-muted-foreground">
-                  Projetos web desenvolvidos com foco em design e experiência do usuário
-                </p>
-              </div>
-
-              <PortfolioGrid sites={sites} loading={loading} />
+          <div className="mb-16 animate-fade-in">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-semibold text-foreground mb-3">
+                Sites Criados
+              </h3>
+              <p className="text-muted-foreground">
+                Projetos web desenvolvidos com foco em design e experiência do usuário
+              </p>
             </div>
-          )}
+
+            <PortfolioGrid sites={sites} loading={loading} />
+          </div>
 
           {/* Instagram Integration */}
           <div className="text-center mb-12">
