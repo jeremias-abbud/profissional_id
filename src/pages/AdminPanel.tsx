@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Eye, EyeOff, Trash2, Upload } from 'lucide-react';
+import { Lock, Eye, EyeOff, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import ImageUploader from '@/components/ImageUploader';
 import LogoCarousel from '@/components/LogoCarousel';
 import PortfolioManager from '@/components/admin/PortfolioManager';
 import { useCarouselImages } from '@/hooks/useCarouselImages';
@@ -13,21 +12,14 @@ const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [error, setError] = useState('');
   const { images: dbImages, uploadImage, deleteImage, loading } = useCarouselImages();
   const { sites: portfolioSites } = usePortfolio();
 
-  // Senha do admin (em produção, isso deveria vir de um backend seguro)
+  // Senha do admin (em um cenário real, use um sistema de autenticação seguro)
   const ADMIN_PASSWORD = 'profissionalid2024';
 
   useEffect(() => {
-    // Carregar imagens salvas do localStorage
-    const savedImages = localStorage.getItem('profissionalid-carousel-images');
-    if (savedImages) {
-      setUploadedImages(JSON.parse(savedImages));
-    }
-
     // Verificar se já está logado
     const isLoggedIn = sessionStorage.getItem('profissionalid-admin-auth');
     if (isLoggedIn === 'true') {
@@ -49,12 +41,6 @@ const AdminPanel = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('profissionalid-admin-auth');
     setPassword('');
-  };
-
-  const handleImagesChange = (images: string[]) => {
-    setUploadedImages(images);
-    // Salvar no localStorage
-    localStorage.setItem('profissionalid-carousel-images', JSON.stringify(images));
   };
 
   if (!isAuthenticated) {
@@ -193,22 +179,6 @@ const AdminPanel = () => {
         {/* Gerenciamento de Portfólio */}
         <PortfolioManager />
 
-        {/* Gerenciamento Local (Legacy) */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Imagens Locais (localStorage)</CardTitle>
-            <p className="text-muted-foreground">
-              Imagens ainda armazenadas localmente (será migrado gradualmente)
-            </p>
-          </CardHeader>
-          <CardContent>
-            <ImageUploader 
-              onImagesChange={handleImagesChange}
-              uploadedImages={uploadedImages}
-            />
-          </CardContent>
-        </Card>
-
         {/* Preview do Carrossel */}
         <Card>
           <CardHeader>
@@ -218,7 +188,7 @@ const AdminPanel = () => {
             </p>
           </CardHeader>
           <CardContent>
-            <LogoCarousel uploadedImages={uploadedImages} />
+            <LogoCarousel uploadedImages={dbImages.map(img => img.url)} />
           </CardContent>
         </Card>
 
@@ -243,7 +213,7 @@ const AdminPanel = () => {
             <Card>
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-primary mb-2">
-                {dbImages.length + uploadedImages.length}
+                {dbImages.length}
               </div>
               <p className="text-muted-foreground">Total no Carrossel</p>
             </CardContent>

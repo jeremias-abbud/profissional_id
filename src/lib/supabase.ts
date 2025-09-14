@@ -5,6 +5,7 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
+// Tipos
 export type CarouselImage = {
   id: string
   filename: string
@@ -12,7 +13,7 @@ export type CarouselImage = {
   uploaded_at: string
 }
 
-export type PortfolioSite = {
+export type PortfolioProject = {
   id: string
   title: string
   description: string
@@ -23,3 +24,70 @@ export type PortfolioSite = {
   created_at: string
   updated_at: string
 }
+
+// Mantenha compatibilidade com código existente
+export type PortfolioSite = PortfolioProject
+
+// Funções CRUD para Portfolio
+export async function getPortfolioProjects(): Promise<PortfolioProject[]> {
+  const { data, error } = await supabase
+    .from('portfolio_projects')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Erro ao carregar projetos:', error)
+    throw error
+  }
+
+  return data || []
+}
+
+export async function createPortfolioProject(projectData: Omit<PortfolioProject, 'id' | 'created_at' | 'updated_at'>): Promise<PortfolioProject> {
+  const { data, error } = await supabase
+    .from('portfolio_projects')
+    .insert([projectData])
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Erro ao criar projeto:', error)
+    throw error
+  }
+
+  return data
+}
+
+export async function updatePortfolioProject(id: string, updates: Partial<PortfolioProject>): Promise<PortfolioProject> {
+  const { data, error } = await supabase
+    .from('portfolio_projects')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Erro ao atualizar projeto:', error)
+    throw error
+  }
+
+  return data
+}
+
+export async function deletePortfolioProject(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('portfolio_projects')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error('Erro ao deletar projeto:', error)
+    throw error
+  }
+}
+
+// Funções com nomes antigos para compatibilidade
+export const getPortfolioSites = getPortfolioProjects
+export const createPortfolioSite = createPortfolioProject
+export const updatePortfolioSite = updatePortfolioProject
+export const deletePortfolioSite = deletePortfolioProject
