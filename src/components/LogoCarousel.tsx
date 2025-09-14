@@ -1,23 +1,19 @@
 import React from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { useCarouselImages } from "@/hooks/useCarouselImages";
 
 interface LogoCarouselProps {
   uploadedImages?: string[];
 }
 
 const LogoCarousel: React.FC<LogoCarouselProps> = ({ uploadedImages = [] }) => {
-  const { images: dbImages } = useCarouselImages();
+  // Agora o componente apenas recebe as URLs prontas para exibir
+  const allImages = uploadedImages.map((url, index) => ({
+    id: `image-${index}`,
+    url: url,
+    filename: `Logo ${index + 1}`,
+  }));
   
-  // Combinar imagens do banco com imagens locais
-  const allImages = [...dbImages, ...uploadedImages.map((img, index) => ({
-    id: `local-${index}`,
-    url: img,
-    filename: `Local image ${index + 1}`,
-    uploaded_at: new Date().toISOString()
-  }))];
-
   // Se não houver imagens, mostrar placeholders
   const displayItems = allImages.length > 0 ? allImages : Array.from({ length: 6 }, (_, index) => ({
     id: `placeholder-${index + 1}`,

@@ -12,7 +12,6 @@ const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [error, setError] = useState('');
   const { images: dbImages, uploadImage, deleteImage, loading } = useCarouselImages();
   const { sites: portfolioSites } = usePortfolio();
@@ -21,12 +20,6 @@ const AdminPanel = () => {
   const ADMIN_PASSWORD = 'profissionalid2024';
 
   useEffect(() => {
-    // Carregar imagens salvas do localStorage
-    const savedImages = localStorage.getItem('profissionalid-carousel-images');
-    if (savedImages) {
-      setUploadedImages(JSON.parse(savedImages));
-    }
-
     // Verificar se já está logado
     const isLoggedIn = sessionStorage.getItem('profissionalid-admin-auth');
     if (isLoggedIn === 'true') {
@@ -48,12 +41,6 @@ const AdminPanel = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('profissionalid-admin-auth');
     setPassword('');
-  };
-
-  const handleImagesChange = (images: string[]) => {
-    setUploadedImages(images);
-    // Salvar no localStorage
-    localStorage.setItem('profissionalid-carousel-images', JSON.stringify(images));
   };
 
   if (!isAuthenticated) {
@@ -143,6 +130,49 @@ const AdminPanel = () => {
           </CardContent>
         </Card>
 
+        {/* Gerenciar Imagens Existentes */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Imagens do Carrossel (Banco de Dados)</CardTitle>
+            <p className="text-muted-foreground">
+              Gerencie as imagens armazenadas no Supabase
+            </p>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="flex justify-center items-center h-32">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : dbImages.length === 0 ? (
+              <p className="text-center text-muted-foreground py-8">
+                Nenhuma imagem encontrada no banco de dados.
+              </p>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {dbImages.map((image) => (
+                  <div key={image.id} className="relative group">
+                    <div className="aspect-square bg-muted/20 rounded-lg overflow-hidden">
+                      <img 
+                        src={image.url} 
+                        alt={image.filename}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
+                      onClick={() => deleteImage(image)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Gerenciamento de Portfólio */}
         <PortfolioManager />
 
@@ -155,7 +185,7 @@ const AdminPanel = () => {
             </p>
           </CardHeader>
           <CardContent>
-        <LogoCarousel uploadedImages={uploadedImages} />
+            <LogoCarousel uploadedImages={dbImages.map(img => img.url)} />
           </CardContent>
         </Card>
 
@@ -178,12 +208,7 @@ const AdminPanel = () => {
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-primary mb-2">
-                {uploadedImages.length}
-              </div>
-              <p className="text-muted-foreground">Imagens Locais</p>
-            </CardContent>
+            {/* Este card pode ser removido ou reaproveitado */}
           </Card>
         </div>
       </div>
