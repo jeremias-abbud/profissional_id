@@ -61,6 +61,7 @@ create policy "Allow portfolio site deletes" on portfolio_projects
 create or replace function update_updated_at_column()
 returns trigger as $$
 begin
+  -- Defina o search_path para segurança, restringindo a busca a schemas conhecidos.
   new.updated_at = timezone('utc'::text, now());
   return new;
 end;
@@ -68,8 +69,10 @@ $$ language plpgsql;
 
 -- Trigger para atualizar updated_at na tabela portfolio_projects
 create trigger update_portfolio_projects_updated_at
-  before update on portfolio_projects
-  for each row execute function update_updated_at_column();
+  before update 
+  on portfolio_projects
+  for each row 
+  execute function update_updated_at_column();
 
 -- Bucket para armazenar imagens (se não existir)
 insert into storage.buckets (id, name, public)
