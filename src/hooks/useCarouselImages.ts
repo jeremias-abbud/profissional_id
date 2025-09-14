@@ -38,14 +38,25 @@ export const useCarouselImages = () => {
         .from('images')
         .upload(filePath, file)
 
-      if (uploadError) throw uploadError
+      if (uploadError) {
+        console.error('Supabase Storage Error:', uploadError);
+        throw uploadError;
+      }
+      console.log('File uploaded to path:', filePath);
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
+      const { data } = supabase.storage
         .from('images')
         .getPublicUrl(filePath)
 
+      if (!data?.publicUrl) {
+        throw new Error('Could not get public URL for the uploaded image.');
+      }
+      const publicUrl = data.publicUrl;
+      console.log('Got public URL:', publicUrl);
+
       // Save metadata to database
+      console.log('Attempting to insert into database...');
       const { error: dbError } = await supabase
         .from('carousel_images')
         .insert([
@@ -56,7 +67,11 @@ export const useCarouselImages = () => {
           },
         ])
 
-      if (dbError) throw dbError
+      if (dbError) {
+        console.error('Supabase DB Insert Error:', dbError);
+        throw dbError;
+      }
+      console.log('Successfully inserted into database.');
 
       toast.success('Imagem enviada com sucesso!')
       fetchImages() // Refresh the list
