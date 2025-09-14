@@ -28,7 +28,9 @@ export const useCarouselImages = () => {
   const uploadImage = async (file: File): Promise<void> => {
     try {
       const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
+      const fileName = `${Date.now()}-${Math.random()
+        .toString(36)
+        .substring(2)}.${fileExt}`
       const filePath = `carousel/${fileName}`
 
       // Upload file to storage
@@ -46,11 +48,13 @@ export const useCarouselImages = () => {
       // Save metadata to database
       const { error: dbError } = await supabase
         .from('carousel_images')
-        .insert({
-          filename: file.name,
-          url: publicUrl,
-          uploaded_at: new Date().toISOString()
-        })
+        .insert([
+          {
+            filename: file.name,
+            url: publicUrl,
+            uploaded_at: new Date().toISOString(),
+          },
+        ])
 
       if (dbError) throw dbError
 
