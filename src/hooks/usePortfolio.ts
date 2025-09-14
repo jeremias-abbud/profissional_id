@@ -22,13 +22,15 @@ export const usePortfolio = () => {
         .order('created_at', { ascending: false })
 
       if (fetchError) {
-        console.error('Erro ao carregar projetos:', fetchError)
+        // Log mais detalhado do erro do Supabase
+        console.error('Supabase fetch error:', fetchError.message)
         throw fetchError
       }
 
       setSites(data || [])
     } catch (err: any) {
-      const errorMessage = err.message || 'Erro ao carregar projetos do portfólio'
+      // Exibe a mensagem de erro específica do Supabase se disponível
+      const errorMessage = err.message || 'Ocorreu um erro ao carregar os projetos do portfólio.'
       setError(errorMessage)
       toast.error(errorMessage)
     } finally {
