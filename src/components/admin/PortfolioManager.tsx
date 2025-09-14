@@ -154,7 +154,6 @@ const PortfolioManager = () => {
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     rows={3}
-                    required
                   />
                 </div>
                 
