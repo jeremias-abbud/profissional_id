@@ -29,7 +29,7 @@ drop policy if exists "Allow carousel image deletes" on carousel_images; create 
 create table if not exists portfolio_projects (
   id uuid default gen_random_uuid() primary key,
   title text not null,
-  description text not null,
+  description text,
   url text not null,
   image_url text not null,
   technologies text[] default '{}',

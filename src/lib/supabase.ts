@@ -16,7 +16,7 @@ export type CarouselImage = {
 export type PortfolioProject = {
   id: string
   title: string
-  description: string
+  description: string | null
   url: string
   image_url: string
   technologies: string[]
