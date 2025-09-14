@@ -9,9 +9,9 @@ export const usePortfolio = () => {
   // Busca os sites do portfólio no Supabase
   const fetchSites = async () => {
     try {
-      const { data, error } = await supabase
-        .from('portfolio_sites')
-        .select('*')
+      const { data, error } = await supabase
+        .from('portfolio_projects')
+        .select('*')
         .order('created_at', { ascending: false })
 
       if (error) throw error
@@ -28,7 +28,7 @@ export const usePortfolio = () => {
   const addSite = async (siteData: Omit<PortfolioSite, 'id' | 'created_at' | 'updated_at'>): Promise<void> => {
     try {
       const { error } = await supabase
-        .from('portfolio_sites')
+        .from('portfolio_projects')
         .insert(siteData) // Removido 'created_at' e 'updated_at'
 
       if (error) throw error
@@ -45,7 +45,7 @@ export const usePortfolio = () => {
   const updateSite = async (id: string, siteData: Partial<PortfolioSite>): Promise<void> => {
     try {
       const { error } = await supabase
-        .from('portfolio_sites')
+        .from('portfolio_projects')
         .update(siteData) // Removido 'updated_at'
         .eq('id', id)
 
@@ -62,9 +62,9 @@ export const usePortfolio = () => {
   // Deleta um site do portfólio
   const deleteSite = async (id: string): Promise<void> => {
     try {
-      const { error } = await supabase
-        .from('portfolio_sites')
-        .delete()
+      const { error } = await supabase
+        .from('portfolio_projects')
+        .delete()
         .eq('id', id)
 
       if (error) throw error
