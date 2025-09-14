@@ -11,37 +11,6 @@ import AdminPanel from "./pages/AdminPanel";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-
-  useEffect(() => {
-    const savedImages = localStorage.getItem('profissionalid-carousel-images');
-    if (savedImages) {
-      setUploadedImages(JSON.parse(savedImages));
-    }
-
-    const handleStorageChange = () => {
-      const savedImages = localStorage.getItem('profissionalid-carousel-images');
-      if (savedImages) {
-        setUploadedImages(JSON.parse(savedImages));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    
-    const interval = setInterval(() => {
-      const savedImages = localStorage.getItem('profissionalid-carousel-images');
-      const currentImages = JSON.stringify(uploadedImages);
-      if (savedImages && savedImages !== currentImages) {
-        setUploadedImages(JSON.parse(savedImages));
-      }
-    }, 1000);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      clearInterval(interval);
-    };
-  }, [uploadedImages]);
-
   return (
     <div className="overflow-x-hidden"> {/* Adicione esta linha */}
       <QueryClientProvider client={queryClient}>
@@ -50,7 +19,7 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index uploadedImages={uploadedImages} />} />
+              <Route path="/" element={<Index />} />
               <Route path="/admin" element={<AdminPanel />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

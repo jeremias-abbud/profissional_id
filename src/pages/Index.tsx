@@ -8,11 +8,7 @@ import ContactSection from "@/components/sections/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 
-interface IndexProps {
-  uploadedImages?: string[];
-}
-
-const Index: React.FC<IndexProps> = ({ uploadedImages = [] }) => {
+const Index: React.FC = () => {
   return (
     <div className="min-h-screen">
       <Header />
@@ -20,7 +16,7 @@ const Index: React.FC<IndexProps> = ({ uploadedImages = [] }) => {
         <HeroSection />
         <AboutSection />
         <ProductsSection />
-        <PortfolioSection uploadedImages={uploadedImages} />
+        <PortfolioSection />
         <ContactSection />
       </main>
       <Footer />

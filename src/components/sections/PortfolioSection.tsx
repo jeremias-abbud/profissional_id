@@ -4,13 +4,12 @@ import { Button } from "@/components/ui/button";
 import LogoCarousel from "@/components/LogoCarousel";
 import PortfolioGrid from "@/components/PortfolioGrid";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useCarouselImages } from "@/hooks/useCarouselImages";
 
-interface PortfolioSectionProps {
-  uploadedImages?: string[];
-}
-
-const PortfolioSection: React.FC<PortfolioSectionProps> = ({ uploadedImages = [] }) => {
+const PortfolioSection: React.FC = () => {
   const { sites, loading } = usePortfolio();
+  const { images: carouselImages } = useCarouselImages();
+
   const handleInstagram = () => {
     window.open("https://www.instagram.com/profissional.id/", "_blank");
   };
@@ -41,14 +40,12 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({ uploadedImages = []
                 Logotipos Criados
               </h3>
               <p className="text-muted-foreground">
-                {uploadedImages.length > 0 
-                  ? `Confira nossos trabalhos mais recentes e projetos em destaque`
-                  : "Algumas das identidades visuais que desenvolvemos para nossos clientes"
-                }
+                Algumas das identidades visuais que desenvolvemos para nossos clientes
               </p>
             </div>
 
-            <LogoCarousel uploadedImages={uploadedImages} />
+            {/* Passa as URLs do banco de dados para o carrossel */}
+            <LogoCarousel uploadedImages={carouselImages.map(img => img.url)} />
           </div>
 
           {/* Sites do Portfolio */}
