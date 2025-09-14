@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { Lock, Eye, EyeOff, Trash2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,14 +12,21 @@ const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [error, setError] = useState('');
   const { images: dbImages, uploadImage, deleteImage, loading } = useCarouselImages();
   const { sites: portfolioSites } = usePortfolio();
 
-  // Senha do admin (em um cenário real, use um sistema de autenticação seguro)
+  // Senha do admin (em produção, isso deveria vir de um backend seguro)
   const ADMIN_PASSWORD = 'profissionalid2024';
 
   useEffect(() => {
+    // Carregar imagens salvas do localStorage
+    const savedImages = localStorage.getItem('profissionalid-carousel-images');
+    if (savedImages) {
+      setUploadedImages(JSON.parse(savedImages));
+    }
+
     // Verificar se já está logado
     const isLoggedIn = sessionStorage.getItem('profissionalid-admin-auth');
     if (isLoggedIn === 'true') {
@@ -41,6 +48,12 @@ const AdminPanel = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('profissionalid-admin-auth');
     setPassword('');
+  };
+
+  const handleImagesChange = (images: string[]) => {
+    setUploadedImages(images);
+    // Salvar no localStorage
+    localStorage.setItem('profissionalid-carousel-images', JSON.stringify(images));
   };
 
   if (!isAuthenticated) {
@@ -130,52 +143,6 @@ const AdminPanel = () => {
           </CardContent>
         </Card>
 
-        {/* Gerenciar Imagens Existentes */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Imagens do Banco de Dados</CardTitle>
-            <p className="text-muted-foreground">
-              Gerencie as imagens armazenadas no Supabase
-            </p>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="flex justify-center items-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            ) : dbImages.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">
-                Nenhuma imagem encontrada no banco de dados
-              </p>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {dbImages.map((image) => (
-                  <div key={image.id} className="relative group">
-                    <div className="aspect-square bg-muted/20 rounded-lg overflow-hidden">
-                      <img 
-                        src={image.url} 
-                        alt={image.filename}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => deleteImage(image)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                    <p className="text-xs text-muted-foreground mt-1 truncate">
-                      {image.filename}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
         {/* Gerenciamento de Portfólio */}
         <PortfolioManager />
 
@@ -188,13 +155,21 @@ const AdminPanel = () => {
             </p>
           </CardHeader>
           <CardContent>
-            <LogoCarousel uploadedImages={dbImages.map(img => img.url)} />
+        <LogoCarousel uploadedImages={uploadedImages} />
           </CardContent>
         </Card>
 
         {/* Estatísticas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
+          <Card>
+            <CardContent className="p-6 text-center">
+              <div className="text-3xl font-bold text-secondary mb-2">
+                {portfolioSites.length}
+              </div>
+              <p className="text-muted-foreground">Sites no Portfólio</p>
+            </CardContent>
+          </Card>
+          <Card>
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-primary mb-2">
                 {dbImages.length}
@@ -204,18 +179,10 @@ const AdminPanel = () => {
           </Card>
           <Card>
             <CardContent className="p-6 text-center">
-              <div className="text-3xl font-bold text-secondary mb-2">
-                {portfolioSites.length}
-              </div>
-              <p className="text-muted-foreground">Sites no Portfólio</p>
-            </CardContent>
-          </Card>
-            <Card>
-            <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-primary mb-2">
-                {dbImages.length}
+                {uploadedImages.length}
               </div>
-              <p className="text-muted-foreground">Total no Carrossel</p>
+              <p className="text-muted-foreground">Imagens Locais</p>
             </CardContent>
           </Card>
         </div>

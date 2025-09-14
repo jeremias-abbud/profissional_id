@@ -37,9 +37,11 @@ export const usePortfolio = () => {
   }
 
   // Adicionar projeto
-  const addSite = async (siteData: Omit<PortfolioProject, 'id' | 'created_at' | 'updated_at'>): Promise<void> => {
+  const addSite = async (
+    siteData: Omit<PortfolioProject, 'id' | 'created_at' | 'updated_at'>
+  ): Promise<void> => {
     try {
-      const { data, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('portfolio_projects')
         .insert([siteData])
         .select()
@@ -60,13 +62,16 @@ export const usePortfolio = () => {
   }
 
   // Atualizar projeto
-  const updateSite = async (id: string, siteData: Partial<PortfolioProject>): Promise<void> => {
+  const updateSite = async (
+    id: string,
+    siteData: Partial<PortfolioProject>
+  ): Promise<void> => {
     try {
       const { error: updateError } = await supabase
         .from('portfolio_projects')
-        .update({ 
-          ...siteData, 
-          updated_at: new Date().toISOString() 
+        .update({
+          ...siteData,
+          updated_at: new Date().toISOString(),
         })
         .eq('id', id)
 
@@ -110,14 +115,16 @@ export const usePortfolio = () => {
   const uploadImage = async (file: File): Promise<string> => {
     try {
       const fileExt = file.name.split('.').pop()
-      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`
+      const fileName = `${Date.now()}_${Math.random()
+        .toString(36)
+        .substring(2)}.${fileExt}`
       const filePath = `portfolio/${fileName}`
 
       const { error: uploadError } = await supabase.storage
         .from('images')
         .upload(filePath, file, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
         })
 
       if (uploadError) {
@@ -125,9 +132,7 @@ export const usePortfolio = () => {
         throw uploadError
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('images')
-        .getPublicUrl(filePath)
+      const { data: { publicUrl } } = supabase.storage.from('images').getPublicUrl(filePath)
 
       return publicUrl
     } catch (err: any) {
@@ -151,6 +156,6 @@ export const usePortfolio = () => {
     deleteSite,
     uploadImage,
     refetch: fetchSites,
-    refresh: fetchSites
+    refresh: fetchSites,
   }
 }
