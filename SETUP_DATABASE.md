@@ -7,7 +7,7 @@ Este documento explica como configurar as tabelas e políticas necessárias no S
 ### 1. carousel_images
 Armazena as imagens do carrossel de logotipos.
 
-### 2. portfolio_sites
+### 2. portfolio_projects
 Armazena os sites do portfólio com suas informações.
 
 ## Como Configurar
@@ -36,7 +36,7 @@ Armazena os sites do portfólio com suas informações.
 - uploaded_at (timestamp)
 ```
 
-### portfolio_sites
+### portfolio_projects
 ```sql
 - id (uuid, primary key)
 - title (text)

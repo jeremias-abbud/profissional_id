@@ -26,7 +26,7 @@ create policy "Allow carousel image deletes" on carousel_images
   for delete using (true);
 
 -- Tabela para sites do portfólio
-create table if not exists portfolio_sites (
+create table if not exists portfolio_projects (
   id uuid default gen_random_uuid() primary key,
   title text not null,
   description text not null,
@@ -38,23 +38,23 @@ create table if not exists portfolio_sites (
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- Habilitar RLS na tabela portfolio_sites
-alter table portfolio_sites enable row level security;
+-- Habilitar RLS na tabela portfolio_projects
+alter table portfolio_projects enable row level security;
 
 -- Política para permitir leitura pública dos sites do portfólio
-create policy "Public can view portfolio sites" on portfolio_sites
+create policy "Public can view portfolio sites" on portfolio_projects
   for select using (true);
 
 -- Política para permitir inserção de sites do portfólio
-create policy "Allow portfolio site inserts" on portfolio_sites
+create policy "Allow portfolio site inserts" on portfolio_projects
   for insert with check (true);
 
 -- Política para permitir atualização de sites do portfólio
-create policy "Allow portfolio site updates" on portfolio_sites
+create policy "Allow portfolio site updates" on portfolio_projects
   for update using (true);
 
 -- Política para permitir exclusão de sites do portfólio
-create policy "Allow portfolio site deletes" on portfolio_sites
+create policy "Allow portfolio site deletes" on portfolio_projects
   for delete using (true);
 
 -- Função para atualizar o updated_at automaticamente
@@ -66,9 +66,9 @@ begin
 end;
 $$ language plpgsql;
 
--- Trigger para atualizar updated_at na tabela portfolio_sites
-create trigger update_portfolio_sites_updated_at
-  before update on portfolio_sites
+-- Trigger para atualizar updated_at na tabela portfolio_projects
+create trigger update_portfolio_projects_updated_at
+  before update on portfolio_projects
   for each row execute function update_updated_at_column();
 
 -- Bucket para armazenar imagens (se não existir)
