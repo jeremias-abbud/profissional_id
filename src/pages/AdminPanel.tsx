@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import LogoCarousel from '@/components/LogoCarousel';
 import PortfolioManager from '@/components/admin/PortfolioManager';
+import BlogManager from '@/components/admin/BlogManager';
 import { useCarouselImages } from '@/hooks/useCarouselImages';
 import { usePortfolio } from '@/hooks/usePortfolio';
 
@@ -175,6 +176,9 @@ const AdminPanel = () => {
 
         {/* Gerenciamento de Portfólio */}
         <PortfolioManager />
+
+        {/* Gerenciamento de Blog */}
+        <BlogManager />
 
         {/* Preview do Carrossel */}
         <Card>

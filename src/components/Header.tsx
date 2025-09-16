@@ -16,17 +16,22 @@ const Header = () => {
   }, []);
 
   const menuItems = [
-    { label: "Início", href: "#inicio" },
-    { label: "Sobre", href: "#sobre" },
-    { label: "Serviços", href: "#produtos" },
-    { label: "Portfolio", href: "#portfolio" },
-    { label: "Contato", href: "#contato" }
+    { label: "Início", href: "#inicio", isExternal: false },
+    { label: "Sobre", href: "#sobre", isExternal: false },
+    { label: "Serviços", href: "#produtos", isExternal: false },
+    { label: "Portfolio", href: "#portfolio", isExternal: false },
+    { label: "Blog", href: "/blog", isExternal: true },
+    { label: "Contato", href: "#contato", isExternal: false }
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+  const handleNavigation = (href: string, isExternal: boolean) => {
+    if (isExternal) {
+      window.location.href = href;
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
     setIsMenuOpen(false);
   };
@@ -48,7 +53,7 @@ const Header = () => {
           {/* Logo */}
           <div 
             className="flex items-center cursor-pointer z-10 relative" 
-            onClick={() => scrollToSection("#inicio")}
+            onClick={() => handleNavigation("#inicio", false)}
           >
             <img 
               src={logo} 
@@ -65,7 +70,7 @@ const Header = () => {
             {menuItems.map((item) => (
               <button
                 key={item.label}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavigation(item.href, item.isExternal)}
                 className="text-foreground hover:text-primary transition-colors duration-200 font-medium relative group"
               >
                 {item.label}
@@ -115,7 +120,7 @@ const Header = () => {
               {menuItems.map((item) => (
                 <button
                   key={item.label}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => handleNavigation(item.href, item.isExternal)}
                   className="text-left py-2.5 px-3 text-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-all duration-200 font-medium text-sm"
                 >
                   {item.label}
