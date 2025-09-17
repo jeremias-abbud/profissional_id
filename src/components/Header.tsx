@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/profissional-id-logo.jpg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,11 +29,23 @@ const Header = () => {
 
   const handleNavigation = (href: string, isExternal: boolean) => {
     if (isExternal) {
-      window.location.href = href;
+      navigate(href);
     } else {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Se estamos numa rota diferente de /, navegar primeiro para /
+      if (location.pathname !== '/') {
+        navigate('/');
+        // Aguardar a navegação antes de fazer scroll
+        setTimeout(() => {
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 100);
+      } else {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       }
     }
     setIsMenuOpen(false);
