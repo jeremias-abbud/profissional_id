@@ -59,12 +59,44 @@ const ShareModal: React.FC<ShareModalProps> = ({ post, open, onOpenChange }) => 
   };
 
   const shareOnInstagram = () => {
-    // Instagram não permite compartilhamento direto via URL, então copiamos o link
-    copyToClipboard();
-    toast({
-      title: "Link copiado!",
-      description: "Cole o link no Instagram Stories ou na sua bio",
-    });
+    // Tentar abrir o app do Instagram com texto
+    const instagramText = `${shareText}\n\n${postUrl}`;
+    
+    // Verifica se está no mobile e tem o app
+    if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
+      const instagramUrl = `instagram://story-camera`;
+      window.open(instagramUrl, '_blank');
+      
+      // Fallback: copiar texto
+      setTimeout(() => {
+        copyToClipboard();
+        toast({
+          title: "Pronto para o Instagram!",
+          description: "Texto copiado! Cole no Instagram Stories.",
+        });
+      }, 500);
+    } else {
+      // No desktop, usar Web Share API se disponível
+      if (navigator.share) {
+        navigator.share({
+          title: post.title,
+          text: shareText,
+          url: postUrl,
+        }).catch(() => {
+          copyToClipboard();
+          toast({
+            title: "Link copiado!",
+            description: "Cole no Instagram ou abra pelo celular",
+          });
+        });
+      } else {
+        copyToClipboard();
+        toast({
+          title: "Link copiado!",
+          description: "Acesse o Instagram pelo celular para compartilhar",
+        });
+      }
+    }
   };
 
   return (

@@ -8,11 +8,11 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useBlog, BlogPost } from '@/hooks/useBlog';
-import { useCarouselImages } from '@/hooks/useCarouselImages';
+import { useBlogImages } from '@/hooks/useBlogImages';
 
 const BlogManager = () => {
   const { posts, loading, createPost, updatePost, deletePost, fetchPosts } = useBlog();
-  const { uploadImage } = useCarouselImages();
+  const { uploadBlogImage } = useBlogImages();
   const [isEditing, setIsEditing] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [formData, setFormData] = useState({
@@ -101,10 +101,8 @@ const BlogManager = () => {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        await uploadImage(file);
-        // Você pode implementar uma função que retorna a URL da imagem
-        // Por enquanto, vamos usar um placeholder
-        setFormData(prev => ({ ...prev, image_url: URL.createObjectURL(file) }));
+        const imageUrl = await uploadBlogImage(file);
+        setFormData(prev => ({ ...prev, image_url: imageUrl }));
       } catch (error) {
         console.error('Erro ao fazer upload da imagem:', error);
       }
